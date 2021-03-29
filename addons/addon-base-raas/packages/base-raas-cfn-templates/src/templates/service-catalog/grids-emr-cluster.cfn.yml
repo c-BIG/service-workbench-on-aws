@@ -214,6 +214,8 @@ Resources:
       Applications:
         - Name: Hadoop
         - Name: Hive
+        - Name: JupyterHub
+        - Name: Livy
         - Name: Spark
       BootstrapActions:
         - Name: Run-Python-Jupyter
