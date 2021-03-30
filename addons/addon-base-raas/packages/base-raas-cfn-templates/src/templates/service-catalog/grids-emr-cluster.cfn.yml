@@ -218,12 +218,6 @@ Resources:
         - Name: Livy
         - Name: Spark
       BootstrapActions:
-        - Name: Run-Python-Jupyter
-          ScriptBootstrapAction:
-            Path: s3://us-east-1.elasticmapreduce/bootstrap-actions/run-if
-            Args:
-              - 'instance.isMaster=true'
-              - '/opt/hail-on-AWS-spot-instances/src/jupyter_run.sh'
         - Name: Mount-S3-Resources
           ScriptBootstrapAction:
             Path: !Sub '${EnvironmentInstanceFiles}/get_bootstrap.sh'
