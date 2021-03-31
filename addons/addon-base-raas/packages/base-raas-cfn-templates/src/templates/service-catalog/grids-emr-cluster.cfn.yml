@@ -18,7 +18,6 @@ Metadata:
           - WorkerInstanceType
           - WorkerBidPrice
           - AccessFromCIDRBlock
-          - AmiId
       - Label:
           default: Tags
         Parameters:
@@ -70,9 +69,6 @@ Parameters:
     Type: String
     MinLength: 9
     Description: Restrict WebUI access to specified address or range
-  AmiId:
-    Type: String
-    Description: Ami Id to use for the cluster
   EnvironmentInstanceFiles:
     Type: String
     Description: >-
@@ -224,8 +220,6 @@ Resources:
             Args:
               - !Ref EnvironmentInstanceFiles
               - !Ref S3Mounts
-      CustomAmiId:
-        Ref: AmiId
       Configurations:
         - Classification: spark
           ConfigurationProperties:
@@ -292,7 +286,7 @@ Resources:
           Value: !Sub '${Namespace}-emr'
       ServiceRole:
         Ref: ServiceRole
-      ReleaseLabel: emr-5.27.0
+      ReleaseLabel: emr-6.1.0
       # This has to be true because we assume a new user each time.
       VisibleToAllUsers: true
       SecurityConfiguration: !Ref EmrSecurityConfiguration
@@ -301,7 +295,7 @@ Resources:
 Outputs:
   JupyterUrl:
     Description: Open Jupyter on your new EMR cluster
-    Value: !Sub 'http://${EmrCluster.MasterPublicDNS}:8192'
+    Value: !Sub 'http://${EmrCluster.MasterPublicDNS}:9443'
   LogBucket:
     Description: EMR Scratch data and Logs bucket
     Value: !Ref LogBucket
@@ -342,4 +336,4 @@ Outputs:
 
   MetaConnection1Url:
     Description: URL to connect to the Jupyter Notebook
-    Value: !Sub 'http://${EmrCluster.MasterPublicDNS}:8192'
+    Value: !Sub 'http://${EmrCluster.MasterPublicDNS}:9443'
