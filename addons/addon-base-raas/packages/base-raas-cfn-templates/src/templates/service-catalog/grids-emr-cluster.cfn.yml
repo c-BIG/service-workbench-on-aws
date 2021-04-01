@@ -108,8 +108,8 @@ Resources:
         Ref: VPC
       SecurityGroupIngress:
         - IpProtocol: tcp
-          FromPort: 8192
-          ToPort: 8192
+          FromPort: 9443
+          ToPort: 9443
           CidrIp:
             Ref: AccessFromCIDRBlock
 
@@ -221,6 +221,9 @@ Resources:
               - !Ref EnvironmentInstanceFiles
               - !Ref S3Mounts
       Configurations:
+        # - Classification: jupyter-hub-conf
+        #   ConfigurationProperties:
+        #     port: 9443
         - Classification: spark
           ConfigurationProperties:
             maximizeResourceAllocation: true
