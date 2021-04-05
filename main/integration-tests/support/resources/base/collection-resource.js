@@ -16,6 +16,7 @@
 
 const _ = require('lodash');
 
+const { sleep } = require('@aws-ee/base-services/lib/helpers/utils');
 const { transform } = require('../../utils/axios-error');
 
 /**
@@ -24,7 +25,7 @@ const { transform } = require('../../utils/axios-error');
  * The frequency of changes to this class is expected to be minimal.
  */
 class CollectionResource {
-  constructor({ clientSession, type, childType, childIdProp = 'id', parent }) {
+  constructor({ clientSession, type, childType, childIdProp = 'id', parent, id }) {
     this.clientSession = clientSession;
     this.axiosClient = clientSession.axiosClient;
     this.setup = clientSession.setup;
@@ -36,6 +37,7 @@ class CollectionResource {
     // id property.
     this.childIdProp = childIdProp;
     this.parent = parent;
+    this.id = id;
   }
 
   // When creating a child resource, this method provides default values.
@@ -50,7 +52,7 @@ class CollectionResource {
     // For example, if the extender class is 'Users' and it provides childType = 'user', then Users class must have
     // a method called 'user()'.
     if (!_.isFunction(this[this.childType])) {
-      throw new Error(`The collection resource ['${this.type}] must have a method named [${this.childType}()]`);
+      throw new Error(`The collection resource ['${this.type}'] must have a method named [${this.childType}()]`);
     }
 
     try {
@@ -64,6 +66,7 @@ class CollectionResource {
       // We add a cleanup task to the cleanup queue for the session
       this.clientSession.addCleanupTask({ id: taskId, task: async () => resourceNode.cleanup(resource) });
 
+      await sleep(this.deflakeDelay());
       return resource;
     } catch (error) {
       throw transform(error);
@@ -71,7 +74,10 @@ class CollectionResource {
   }
 
   async update(body = {}, params = {}, { api = this.api } = {}) {
-    return this.doCall(async () => this.axiosClient.put(api, body, { params }));
+    const response = await this.doCall(async () => this.axiosClient.put(api, body, { params }));
+
+    await sleep(this.deflakeDelay());
+    return response;
   }
 
   // Because this is a collection resource, the GET method returns an array of the instance child resources
@@ -82,7 +88,10 @@ class CollectionResource {
   // In general, most of SWB APIs on the server side should not support the ability to delete a collection
   // resource. However, it might be desireable that we test against this. Therefore, this method exists.
   async delete(body = {}, params = {}, { api = this.api } = {}) {
-    return this.doCall(async () => this.axiosClient.delete(api, body, { params }));
+    const response = await this.doCall(async () => this.axiosClient.delete(api, body, { params }));
+
+    await sleep(this.deflakeDelay());
+    return response;
   }
 
   // We wrap the call to axios so that we can capture the boom code and payload attributes passed from the
@@ -94,6 +103,12 @@ class CollectionResource {
     } catch (error) {
       throw transform(error);
     }
+  }
+
+  // Specifies the delay duration in milliseconds needed to minimize the usage of stale data due to eventual
+  // consistency. Duration can be altered by overriding function in sub-class.
+  async deflakeDelay() {
+    return 2000;
   }
 }
 
