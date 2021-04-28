@@ -47,19 +47,22 @@ const productsToCreate = [
   {
     filename: 'sagemaker-notebook-instance',
     displayName: 'SageMaker Notebook',
-    description: `An Amazon SageMaker Jupyter Notebook that comes with: \n* TensorFlow \n* Apache MXNet \n* Scikit-learn
-  `,
+    description: `An Amazon SageMaker Jupyter Notebook that comes with: \n* TensorFlow \n* Apache MXNet \n* Scikit-learn`,
   },
   {
     filename: 'emr-cluster',
     displayName: 'EMR',
-    description: `An Amazon EMR research workspace that comes with: \n* Hail 0.2 \n* Jupyter Lab \n* Spark 2.4.4 \n* Hadoop 2.8.5
-`,
+    description: `An Amazon EMR research workspace that comes with: \n* Hail 0.2 \n* Jupyter Lab \n* Spark 2.4.4 \n* Hadoop 2.8.5`,
   },
   {
     filename: 'ec2-windows-instance',
     displayName: 'EC2 Windows',
     description: `* An EC2 Windows instance with RDP access \n* Secure compute in the cloud`,
+  },
+  {
+    filename: 'grids-emr-cluster',
+    displayName: 'EMR from GRIDS',
+    description: `An Amazon EMR research workspace that comes with: \n* Hail 0.2 \n* Jupyter Hub \n* Spark 3.0.0 \n* Scala v2.12.10\n* Hadoop 3.2.1`,
   },
 ];
 
