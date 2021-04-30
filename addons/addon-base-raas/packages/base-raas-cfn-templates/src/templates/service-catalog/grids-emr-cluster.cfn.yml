@@ -18,7 +18,7 @@ Metadata:
           - WorkerInstanceType
           - WorkerBidPrice
           - AccessFromCIDRBlock
-          # - AmiId
+          - AmiId
       - Label:
           default: Tags
         Parameters:
@@ -70,9 +70,9 @@ Parameters:
     Type: String
     MinLength: 9
     Description: Restrict WebUI access to specified address or range
-  # AmiId:
-  #   Type: String
-  #   Description: Ami Id to use for the cluster
+  AmiId:
+    Type: String
+    Description: Ami Id to use for the cluster
   EnvironmentInstanceFiles:
     Type: String
     Description: >-
@@ -245,20 +245,14 @@ Resources:
         - Name: Livy
         - Name: Spark
       BootstrapActions:
-        # - Name: Run-Python-Jupyter
-        #   ScriptBootstrapAction:
-        #     Path: !Sub 's3://${AWS::Region}.elasticmapreduce/bootstrap-actions/run-if'
-        #     Args:
-        #       - 'instance.isMaster=true'
-        #       - '/opt/hail-on-AWS-spot-instances/src/jupyter_run.sh'
         - Name: Mount-S3-Resources
           ScriptBootstrapAction:
             Path: !Sub '${EnvironmentInstanceFiles}/get_bootstrap.sh'
             Args:
               - !Ref EnvironmentInstanceFiles
               - !Ref S3Mounts
-      # CustomAmiId:
-      #   Ref: AmiId
+      CustomAmiId:
+        Ref: AmiId
       Configurations:
         - Classification: spark
           ConfigurationProperties:
@@ -329,7 +323,7 @@ Resources:
           Value: !Sub '${Namespace}-emr'
       ServiceRole:
         Ref: ServiceRole
-      ReleaseLabel: emr-5.27.0
+      ReleaseLabel: emr-6.2.0
       # This has to be true because we assume a new user each time.
       VisibleToAllUsers: true
       SecurityConfiguration: !Ref EmrSecurityConfiguration
@@ -338,7 +332,10 @@ Resources:
 Outputs:
   JupyterUrl:
     Description: Open Jupyter on your new EMR cluster
-    Value: !Sub 'http://${EmrCluster.MasterPublicDNS}:8192'
+    Value: !Sub 'https://${EmrCluster.MasterPublicDNS}:9443'
+  SparkUrl:
+    Description: Open SpartUI on your new EMR cluster
+    Value: !Sub 'http://${EmrCluster.MasterPublicDNS}:18080'
   LogBucket:
     Description: EMR Scratch data and Logs bucket
     Value: !Ref LogBucket

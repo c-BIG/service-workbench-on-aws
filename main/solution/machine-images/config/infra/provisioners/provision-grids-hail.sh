@@ -5,7 +5,6 @@
 ###
 
 # emr 6.2.0
-# Ganglia 3.7.2
 # Hadoop 3.2.1
 # JupyterHub 1.1.0
 # Livy 0.7.0
