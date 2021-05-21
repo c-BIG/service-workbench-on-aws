@@ -49,20 +49,11 @@ sudo make install-on-cluster HAIL_COMPILE_NATIVES=1 SCALA_VERSION=2.12.10 SPARK_
 # sudo chmod -R 777 /opt/zeppelin/
 
 # # Update packages as of GRIDS extention
-# WHEELS="umap-learn==0.5.1
-# bkzep"
-
-# for WHEEL_NAME in $WHEELS
-# do
-#   sudo python3 -m pip install $WHEEL_NAME
-# done
-
-# Set Python 3 as default 
-# sudo update-alternatives --install /usr/bin/python python /usr/bin/python3 10
-# After that step yum is broken as it do not support python3
+sudo python3 -m pip install bkzep
+# umap-learn==0.5.1
 
 ###
 # END
 ###
-# dev-sg-npmsw-mh-GRIDS-EMR-AMI-1621563359
-# ami-018960b3fdad75d5b
+# dev-sg-npmsw-mh-GRIDS-EMR-AMI-1621573171
+# ami-00aa2b4871e544b1e
