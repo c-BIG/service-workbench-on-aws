@@ -107,7 +107,7 @@ Resources:
   MasterSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: Jupyter-SparkUI
+      GroupDescription: Jupyter-SparkUI-Zeppelin
       VpcId:
         Ref: VPC
       SecurityGroupIngress:
@@ -119,6 +119,11 @@ Resources:
         - IpProtocol: tcp
           FromPort: 18080
           ToPort: 18080
+          CidrIp:
+            Ref: AccessFromCIDRBlock
+        - IpProtocol: tcp
+          FromPort: 8890
+          ToPort: 8890
           CidrIp:
             Ref: AccessFromCIDRBlock
 
@@ -236,14 +241,15 @@ Resources:
   # TODO: Add security configuration to cluster
   # TODO: Can we make the jupyter use https?
   # TODO: Also change notebook owner to hadoop on launch
+  # - Name: JupyterHub
   EmrCluster:
     Type: AWS::EMR::Cluster
     Properties:
       Applications:
         - Name: Hadoop
-        - Name: JupyterHub
         - Name: Livy
         - Name: Spark
+        - Name: Zeppelin
       BootstrapActions:
         - Name: Mount-S3-Resources
           ScriptBootstrapAction:
@@ -336,6 +342,9 @@ Outputs:
   SparkUrl:
     Description: Open SpartUI on your new EMR cluster
     Value: !Sub 'http://${EmrCluster.MasterPublicDNS}:18080'
+  ZeppelinUrl:
+    Description: Open Zeppelin on your new EMR cluster
+    Value: !Sub 'http://${EmrCluster.MasterPublicDNS}:8890'
   LogBucket:
     Description: EMR Scratch data and Logs bucket
     Value: !Ref LogBucket
@@ -385,3 +394,16 @@ Outputs:
   MetaConnection2Url:
     Description: URL to connect to the Spark UI
     Value: !Sub 'http://${EmrCluster.MasterPublicDNS}:18080'
+
+  MetaConnection3Name:
+    Description: Name for connection 3
+    Value: Main URL for the Zeppelin Notebook
+
+  MetaConnection3Url:
+    Description: URL to connect to the Zeppelin Notebook
+    Value: !Sub 'http://${EmrCluster.MasterPublicDNS}:8890'
+
+###
+# END
+###
+# EMR-GRIDS-v10
