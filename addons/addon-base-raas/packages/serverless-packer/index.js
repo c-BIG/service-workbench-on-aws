@@ -29,7 +29,7 @@ class ServerlessPackerPlugin {
         usage: 'Build an AMI using packer',
         lifecycleEvents: ['build'],
         options: {
-          file: {
+          files: {
             usage:
               'Override the packer file used to build the AMI' +
               '(e.g. "--file \'packer.json\'" or "-m \'packer.json\'")',

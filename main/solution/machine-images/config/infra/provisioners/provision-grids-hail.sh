@@ -45,15 +45,18 @@ sudo make install-on-cluster HAIL_COMPILE_NATIVES=1 SCALA_VERSION=2.12.10 SPARK_
 # sudo make install-on-cluster HAIL_COMPILE_NATIVES=1 SCALA_VERSION=2.12.10 SPARK_VERSION=3.1.1
 
 # # Create Zeppelin folder
-# sudo mkdir -p /opt/zeppelin
-# sudo chmod -R 777 /opt/zeppelin/
+sudo mkdir -p /opt/zeppelin
+sudo chmod -R 777 /opt/zeppelin/
+cd /opt/zeppelin
+sudo git clone --depth 1 https://github.com/c-BIG/demo-notebooks.git .
 
 # # Update packages as of GRIDS extention
+sudo python3 -m pip install wheel
 sudo python3 -m pip install bkzep
 # umap-learn==0.5.1
 
 ###
 # END
 ###
-# dev-sg-npmsw-mh-GRIDS-EMR-AMI-1621573171
-# ami-00aa2b4871e544b1e
+# dev-sg-npmsw-mh-GRIDS-EMR-AMI-1623317806
+# ami-03ee8b83392e6825b
